@@ -80,3 +80,42 @@ const optionsElement = document.getElementById('options');
 const nextButton = document.getElementById('nextButton');
 const scoreElement = document.getElementById('score');
 
+const loadQuestion = () => {
+    const currentQuestion = questions[currentQuestionIndex];
+    questionElement.textContent = currentQuestion.question;
+    optionsElement.innerHTML = '';
+    currentQuestion.options.forEach(option => {
+        const li = document.createElement('li');
+        li.textContent = option;
+        li.addEventListener('click', () => selectAnswer(option));
+        optionsElement.appendChild(li);
+    });
+};
+
+const selectAnswer = (selectedOption) => {
+    const correctAnswer = questions[currentQuestionIndex].answer;
+    if (selectedOption === correctAnswer) {
+        score++;
+    }
+    nextButton.classList.remove('hidden');
+};
+
+nextButton.addEventListener('click', () => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+        loadQuestion();
+        nextButton.classList.add('hidden');
+    } else {
+        showScore();
+    }
+});
+
+const showScore = () => {
+    questionElement.classList.add('hidden');
+    optionsElement.classList.add('hidden');
+    nextButton.classList.add('hidden');
+    scoreElement.textContent = `Your score: ${score} out of ${questions.length}`;
+    scoreElement.classList.remove('hidden');
+};
+
+loadQuestion();
